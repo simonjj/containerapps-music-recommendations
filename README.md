@@ -6,6 +6,9 @@ In this tutorial, we will walk through the process of setting up an Azure Contai
 to stand up a Jupyter Lab instance to learn and execute and learn about building an 
 ephemeral web interface.
 
+> The original version of this tutorial can be found here: 
+> [https://github.com/qdrant/examples/blob/master/qdrant_101_audio_data/03_qdrant_101_audio.ipynb](https://github.com/qdrant/examples/blob/master/qdrant_101_audio_data/03_qdrant_101_audio.ipynb).
+
 
 ## Prerequisites
 Before we begin, you will need the following:
