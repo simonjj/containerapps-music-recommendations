@@ -38,6 +38,8 @@ Please keep the following informtation in mind as you use this code/sample/tutor
   you can use the File > Download menu to do so.
 * The provided dataset is ~11k songs. A regular workstation CPU generates around 1k embeddings
   in 5 minutes.
+* The Jupyter container includes the data needed for our tutorial, due to its size startup
+  will take longer than usual.
 
 
 ## Todo
