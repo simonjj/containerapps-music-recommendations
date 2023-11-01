@@ -6,7 +6,7 @@ export APPNAME=temp-music-reco-srv
 export RESOURCE_GROUP=playground
 
 # these are nice/optional to customize
-export LOCATION=northcentralus
+export LOCATION=southcentralus
 export ENVIRONMENT=temp-music-recommendations
 
 echo "The following variables have been set:"
@@ -19,18 +19,13 @@ echo "====================================="
 # for documentation on workload profiles see 
 # https://docs.microsoft.com/en-us/azure/container-apps/container-apps-workload-profiles
 # currently untested, change below only if you know what you're doing
-export USE_WLPROFILE=false
+export USE_WLPROFILE=true
 export WLPROFILE=D32
 export CPU_SIZE=8.0
 export MEMORY_SIZE=16.0Gi
 export IMAGE=simonj.azurecr.io/aca-ephemeral-music-recommendation-image
 export QDBNAME=qdrantdb
 
-
-# NOTES & TODOs
-# Note: This scrupt is currently not entirely functional due to a bug with the add-on
-# - setup CORS
-# - workload profile path not tested fully
 
 
 if [ "$1" = "delete" ]; then
@@ -73,7 +68,7 @@ if [ "$USE_WLPROFILE" = true ]; then
       az containerapp env create --name $ENVIRONMENT --resource-group $RESOURCE_GROUP --location $LOCATION
       az containerapp env workload-profile set --name $ENVIRONMENT \
         --resource-group $RESOURCE_GROUP --workload-profile-type $WLPROFILE \
-        --workload-profile-name bigProfile --min-nodes 0 --max-nodes 1
+        --workload-profile-name bigProfile --min-nodes 0 --max-nodes 2
    fi
    echo "..done"
 
@@ -93,16 +88,27 @@ if [ "$USE_WLPROFILE" = true ]; then
       echo "CREATING CONTAINER APP" 
       echo "CPU size: $CPU_SIZE"
       echo "Memory size: $MEMORY_SIZE"
+
+      # create container app qdrant
+      # BUG: This is the workaround for the bug above
+      az containerapp create --name ${QDBNAME}db --resource-group $RESOURCE_GROUP --environment $ENVIRONMENT \
+        --workload-profile-name bigProfile --cpu 2.0 --memory 4.0Gi \
+        --image mcr.microsoft.com/k8se/services/qdrant:v1.4 \
+        --min-replicas 1 --max-replicas 1
+
       # create container app
       az containerapp create --name $APPNAME --resource-group $RESOURCE_GROUP --environment $ENVIRONMENT \
         --workload-profile-name bigProfile --cpu $CPU_SIZE --memory $MEMORY_SIZE --image $IMAGE \
-        --min-replicas 1 --max-replicas 2 \
-        --env-vars RESTARTABLE=yes
+        --min-replicas 1 --max-replicas 1 \
+        --env-vars RESTARTABLE=yes --env-vars QDRANTDB_QDRANT_HOST=${QDBNAME}db
 
-
-      echo "bind app to qdrantdb" 
+      #echo "bind app to qdrantdb" 
       # bind app to qdrantdb
       #OFF az containerapp update -n $APPNAME -g $RESOURCE_GROUP --bind qdrantdb
+      # BUG: this is a workaround for the bug above
+      echo "enabling ingress for qdrantdb replacement" 
+      az containerapp ingress enable -n ${QDBNAME}db -g $RESOURCE_GROUP \
+        --type internal --target-port 6333 --transport tcp
    fi
    echo "..done"
 
@@ -111,11 +117,13 @@ if [ "$USE_WLPROFILE" = true ]; then
    # enable ingress
    az containerapp ingress enable -n $APPNAME -g $RESOURCE_GROUP \
      --type external --target-port 8888 --transport auto
+   az containerapp ingress cors enable --name $APPNAME --resource-group $RESOURCE_GROUP
+     --allowed-origins *
 
-    sleep 30
-    # print login token
-    az containerapp logs show -g $RESOURCE_GROUP -n $APPNAME --tail 300 \
-      | grep token |  cut -d= -f 2 | cut -d\" -f 1 | uniq
+   sleep 120
+   # print login token
+   az containerapp logs show -g $RESOURCE_GROUP -n $APPNAME --tail 300 \
+     | grep token |  cut -d= -f 2 | cut -d\" -f 1 | uniq
 
 # use consumption plan
 else
@@ -181,8 +189,9 @@ else
    # enable ingress
    az containerapp ingress enable -n $APPNAME -g $RESOURCE_GROUP \
      --type external --target-port 8888 --transport auto
+   az containerapp ingress cors enable --name $APPNAME --resource-group $RESOURCE_GROUP
+     --allowed-origins *
 
-   # we don't really need ingress for the db but otherwise we can't resolve it
    # BUG: this is a workaround for the bug above
    az containerapp ingress enable -n ${QDBNAME}db -g $RESOURCE_GROUP \
      --type internal --target-port 6333 --transport tcp
