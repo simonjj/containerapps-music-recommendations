@@ -77,9 +77,9 @@ if [ "$USE_WLPROFILE" = true ]; then
       
       echo "creating qdrantdb" 
       ### create a Qdrant Add-on
-      #OFF az containerapp service qdrant create --environment $ENVIRONMENT --resource-group $RESOURCE_GROUP \
-      #OFF   --name qdrantdb
-        #--cpu 2.0 --memory 4.0Gi \
+      # BUG, this doesn't currently work
+      az containerapp service qdrant create --environment $ENVIRONMENT --resource-group $RESOURCE_GROUP \
+         --name $QDBNAME
    fi
    echo "..done"
 
@@ -90,7 +90,7 @@ if [ "$USE_WLPROFILE" = true ]; then
       echo "Memory size: $MEMORY_SIZE"
 
       # create container app qdrant
-      # BUG: This is the workaround for the bug above
+      # WORKAROUND: This is the workaround for the bug above instead of add let's create an app for qdrant
       az containerapp create --name ${QDBNAME}db --resource-group $RESOURCE_GROUP --environment $ENVIRONMENT \
         --workload-profile-name bigProfile --cpu 2.0 --memory 4.0Gi \
         --image mcr.microsoft.com/k8se/services/qdrant:v1.4 \
@@ -101,11 +101,15 @@ if [ "$USE_WLPROFILE" = true ]; then
         --workload-profile-name bigProfile --cpu $CPU_SIZE --memory $MEMORY_SIZE --image $IMAGE \
         --min-replicas 1 --max-replicas 1 \
         --env-vars RESTARTABLE=yes --env-vars QDRANTDB_QDRANT_HOST=${QDBNAME}db
+        # WORKAROUND: use the below line once the bug is fixed
+        # --env-vars RESTARTABLE=yes
 
       #echo "bind app to qdrantdb" 
       # bind app to qdrantdb
-      #OFF az containerapp update -n $APPNAME -g $RESOURCE_GROUP --bind qdrantdb
-      # BUG: this is a workaround for the bug above
+      # BUG: this doesn't currently work
+      az containerapp update -n $APPNAME -g $RESOURCE_GROUP --bind qdrantdb
+
+      # WORKAROUND: this is a workaround for the bug above
       echo "enabling ingress for qdrantdb replacement" 
       az containerapp ingress enable -n ${QDBNAME}db -g $RESOURCE_GROUP \
         --type internal --target-port 6333 --transport tcp
@@ -122,8 +126,8 @@ if [ "$USE_WLPROFILE" = true ]; then
 
    sleep 120
    # print login token
-   az containerapp logs show -g $RESOURCE_GROUP -n $APPNAME --tail 300 \
-     | grep token |  cut -d= -f 2 | cut -d\" -f 1 | uniq
+   echo your login token is: `az containerapp logs show -g $RESOURCE_GROUP -n $APPNAME --tail 300 | \
+      grep token |  cut -d= -f 2 | cut -d\" -f 1 | uniq`
 
 # use consumption plan
 else
