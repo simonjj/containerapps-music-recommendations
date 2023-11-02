@@ -24,10 +24,10 @@ Before we begin, you will need the following:
     * APPNAME (optional)
 2. Run the `aca_environment.sh` script file to start the Azure Container App and deploy the 
    needed add-ons.
-3. Visit the url for `APP_NAME` and aquire the token by taking a look at the console log of 
+3. Visit the url for `APPNAME` and aquire the token by taking a look at the console log of 
    the application. Note: The token might take 1-2 minutes after the deployment to show in 
    the logs.
-4. Once you've logged into Jupyter navigate to the `music_recommendations.ipynb` notebook and
+4. Once you've logged into Jupyter navigate to the `start.ipynb` notebook and
    follow along using the documentation provided there.
 
 

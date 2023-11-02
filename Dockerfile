@@ -29,8 +29,10 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip && \
 
 USER ${NB_UID}
 
-COPY ./notebooks/music_recommendations.ipynb "${HOME}"
-COPY ./notebooks/data_prep.ipynb "${HOME}"
+COPY ./notebooks/start.ipynb "${HOME}"
+COPY ./notebooks/data_prep.ipynb "${HOME}/data/"
 COPY data/ "${HOME}/data/"
 
 WORKDIR "${HOME}"
+ENTRYPOINT ["start-notebook.sh"]
+CMD ["--NotebookApp.default_url=/lab/tree/start.ipynb"]
