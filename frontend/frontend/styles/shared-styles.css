@@ -1,0 +1,23 @@
+header {
+  align-items: center;
+  display: flex;
+}
+
+header h1 {
+  font-size: var(--lumo-font-size-m);
+  margin: 0;
+}
+
+main {
+  padding: var(--lumo-space-l);
+}
+
+.header-background {
+  background-image: url('/images/music_background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
