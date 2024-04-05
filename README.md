@@ -102,9 +102,8 @@ Create the application and deploy the notebook image. Also enable ingress so we 
       --ingress external \
       --bind qdrant \
       --workload-profile-name gpu  # drop this argument if you're not using GPU
-    ```
-Once running retrieve the authentication token from the application log. The token should follow this **format** `4e3f4102923452495a2c20d8622d064166a43274cb57cf0d`.
-    ```
+
+    # once running (wait for 1-2 minutes) retrieve the login token from the log
     az containerapp logs show \
       -g $RG \
       -n $music-jupyer | grep token
@@ -140,57 +139,11 @@ Once we have the embeddings generated we can create the backend and frontend app
       --ingress external \
       --target-port 8080 
     ```
+Given all applications were deployed successfully the application should now be accessible at the URL shown after the frontend command completes.
 
-
-
-
-az containerapp ingress cors enable --name music-jupyter-full --resource-group music-rec-service --allow-credentials true --allowed-origins *
-
-
-az containerapp create --name cuda-debug --resource-group music-rec-service --environment music-env-full --workload-profile-name gpu --min-replicas 1 --max-replicas 1 --image fnndsc/dbg-nvidia-smi --command sleep 3600
-
-
-run this command to bring the frontend online
-az containerapp up -g music-rec-service --environment music-env-full -n music-frontend-full --ingress external --target-port 8080 --location westus3 --artifact ~/music-frontend-app/full-music-frontend-1.0.jar
-
-az containerapp update -g music-rec-service -n music-frontend-full --artifact ~/music-frontend-app/full-music-frontend-1.0.jar
-
-
-
-
-az containerapp create --name filer --resource-group music-rec-service --environment music-env-full  --image simonj.azurecr.io/filer-helper --min-replicas 1 --max-replicas 1 --target-port 80 --ingress external
-
-Please follow these steps to do so:
-
-
-
-1. Clone this repository and edit the `aca_environment.sh` to set the desired variables for:
-    * RESOURCE_GROUP
-    * APPNAME (optional)
-2. Run the `aca_environment.sh` script file to start the Azure Container App and deploy the 
-   needed add-ons.
-3. Visit the url for `APPNAME` and aquire the token by taking a look at the console log of 
-   the application. Note: The token might take 1-2 minutes after the deployment to show in 
-   the logs.
-4. Once you've logged into Jupyter navigate to the `start.ipynb` notebook and
-   follow along using the documentation provided there.
-
-
-## Important
-Please keep the following informtation in mind as you use this code/sample/tutorial:
-* All of the Jupyter notebook data is emphemeral and hence **the changes you make to the 
-  notebook will not be preserved**. If you'd like to customize the notebook and reuse it
-  you can use the File > Download menu to do so.
-* The provided dataset is ~11k songs. A regular workstation CPU generates around 1k embeddings
-  in 5 minutes.
-* The Jupyter container includes the data needed for our tutorial, due to its size startup
-  will take longer than usual.
-
+## Issues and Contributions
+For questions or problems with this code please file issues in this repository. Contributions are welcome.
 
 ## Todo
 The following items would improve this tutorial/sample:
-* Convert the `aca_environment.sh` script into a AZD template.
-* Some more documentation and clarity.
-* Provide a GUI on top of the recommendation service.
-* Test execution on GPU.
-* Move the current Jupyter container to a more official location.
+* Develop a AZD template for easier/quicker deployment.
