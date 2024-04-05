@@ -1,3 +1,5 @@
 *.txt
 /data/
 /qdrant/
+*.mp3
+*.jar
