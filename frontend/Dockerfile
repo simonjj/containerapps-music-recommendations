@@ -1,14 +1,15 @@
-FROM openjdk:21
-COPY ./target/full-music-frontend-1.0.jar /usr/src/myapp/full-music-frontend-1.0.jar
-#RUN mkdir /usr/src/myapp
-#WORKDIR /usr/src/myapp
-#RUN javac full-music-frontend-1.0.jar
+# Stage 1: Build with Maven
+FROM maven:3.9.6-sapmachine-21 AS build
+WORKDIR /app
+COPY pom.xml .
+#COPY mvnw .
+#COPY mvnw.cmd .
+COPY src ./src
+RUN mvn dependency:go-offline -B -Dproduction package
+
+
+# Stage 2: Create the Docker image 
+FROM sapmachine:21.0.2-jre-headless-ubuntu
+COPY --from=build /app/target/music-frontend-1.0.jar /usr/src/myapp/music-frontend-1.0.jar
 EXPOSE 8080
-CMD ["java", "-jar", "/usr/src/myapp/full-music-frontend-1.0.jar"]
-
-
-#FROM java:8
-#WORKDIR /
-#ADD HelloWorld.jar HelloWorld.jar
-#EXPOSE 8080
-#CMD java - jar HelloWorld.jar
+CMD ["java", "-jar", "/usr/src/myapp/music-frontend-1.0.jar"]
