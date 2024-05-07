@@ -1,8 +1,17 @@
 package com.vaadin.example.rest.util;
+import java.util.logging.Logger;
 
 public class Utils {
+    private static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
+
     public static String getBackendServer() {
-        //return "music-backend-full--f7v5ecl.jollypebble-7fb62916.westus3.azurecontainerapps.io";
-        return "music-backend-demo.ashystone-56c2313c.westus3.azurecontainerapps.io";
+        String backendServer = System.getenv("UI_BACKEND");
+        if (backendServer == null || backendServer.isEmpty()) {
+            // Log an error message
+            LOGGER.severe("Environment variable UI_BACKEND is not set. Using localhost as the default ui backend endpoint.");
+            // return default server if UI_BACKEND is not set
+            backendServer = "localhost";
+        }
+        return backendServer;
     }
 }
