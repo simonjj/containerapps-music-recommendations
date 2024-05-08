@@ -2,11 +2,12 @@
 FROM maven:3.9.6-sapmachine-21 AS build
 WORKDIR /app
 COPY pom.xml .
-#COPY mvnw .
-#COPY mvnw.cmd .
 COPY src ./src
-RUN mvn dependency:go-offline -B -Dproduction package
-
+COPY frontend ./frontend
+#RUN find /app -type f
+RUN mvn clean package -e -Pproduction -Dvaadin.force.production.build=true -Dvaadin.frontend.hotdeploy=true
+#RUN mvn clean package -e -Pproduction -Dvaadin.force.production.build=true -Dvaadin.frontend.hotdeploy=true
+#RUN find /app -type f
 
 # Stage 2: Create the Docker image 
 FROM sapmachine:21.0.2-jre-headless-ubuntu
