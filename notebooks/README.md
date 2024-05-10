@@ -12,7 +12,7 @@ Using the notebook the user learns about how the Qdrant vector database can be u
 ## Data Prep
 The original version of this notebook shapes the original Kaggle dataset into a format which is more suited for vector database insertion. Only then does it cover the embedding generation and recommendation retrieval. 
 
-Skipping the dataset shaping is recommended. Since it adds little to the overall learning simply starting with the ready-to-go container (`simonj.azurecr.io/aca-ephemeral-music-recommendation-image`) speeds things up. The container contains the data in the correct shape, and stores it for easy ingestion as part of the notebook (arrow format).
+Skipping the dataset shaping is recommended. Since it adds little to the overall learning simply starting with the ready-to-go container (`simonj.azurecr.io/aca-music-recommendation-notebook`) speeds things up. The container contains the data in the correct shape, and stores it for easy ingestion as part of the notebook (arrow format).
 
 If you want to re-shape the data from the original Kaggle data you can do so using the `data_prep.ipynb` notebook included as part of the container.
 

@@ -65,7 +65,7 @@ These instructions are designed to deploy this service on [Azure Container Apps]
     export LOCATION=westus3
     export RG=music-rec-service
     export ACA_ENV=music-env
-    export NOTEBOOK_IMAGE=simonj.azurecr.io/aca-ephemeral-music-recommendation-image
+    export NOTEBOOK_IMAGE=simonj.azurecr.io/aca-music-recommendation-notebook
     export BACKEND_IMAGE=simonj.azurecr.io/aca-music-recommendation-backend
     export FRONTEND_IMAGE=simonj.azurecr.io/aca-music-recommendation-frontend
     ```
