@@ -29,8 +29,10 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip && \
 
 USER ${NB_UID}
 
-COPY ./notebooks/start.ipynb "${HOME}"
-COPY ./notebooks/data_prep.ipynb "${HOME}/data/"
+COPY start.ipynb "${HOME}"
+COPY import.ipynb "${HOME}"
+COPY recommend.ipynb "${HOME}"
+COPY data_prep.ipynb "${HOME}/data/"
 COPY data/ "${HOME}/data/"
 
 WORKDIR "${HOME}"
