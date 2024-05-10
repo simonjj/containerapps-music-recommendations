@@ -1,5 +1,7 @@
 # Music Recommendation Jupyter Notebook
 
+![UI screenshot](./misc/screenshot.png)
+
 ## Overview
 Using the notebook the user learns about how the Qdrant vector database can be used to generate music recommendations. The notebook server is based on [Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) and uses the [Ludwig Music Dataset](https://www.kaggle.com/datasets/jorgeruizdev/ludwig-music-dataset-moods-and-subgenres) from Kaggle. We use the [panns-inference](https://pypi.org/project/panns-inference/) package to generate embeddings of our audio. Detailed documentation is provided in-notebook.
 
