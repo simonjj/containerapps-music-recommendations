@@ -61,6 +61,7 @@ docker push $REGISTRY/$BACKEND_IMAGE
 These instructions are designed to deploy this service on [Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/overview). In order to speed up the embedding generation, we will utilize a GPU workload profile, which will be used during the initial embedding creation. The Qdrant vector database Add-on will be used as the backend for our recommendations.
 
 1. Define Needed Variables
+
     ```
     export LOCATION=westus3
     export RG=music-rec-service
@@ -70,7 +71,9 @@ These instructions are designed to deploy this service on [Azure Container Apps]
     export FRONTEND_IMAGE=simonj.azurecr.io/aca-music-recommendation-frontend
     ```
 
+
 2. Create Azure Container Apps Environment
+
 Please note that this environment create command creates a GPU workload profile (`--enable-dedicated-gpu`). If you don't have GPU quota or don't mind waiting for your embeddings to be created you can drop this argument from the command below.
     ```
     az containerapp env create \
@@ -80,7 +83,9 @@ Please note that this environment create command creates a GPU workload profile 
       --enable-dedicated-gpu
     ```
 
+
 3. Create the Qdrant Vector DB Add-on
+    
     ```
     az containerapp add-on qdrant create \
       --environment $ACA_ENV \
@@ -88,7 +93,9 @@ Please note that this environment create command creates a GPU workload profile 
       --name qdrant
     ```
 
+
 4. Create the Notebook Application
+
 Create the application and deploy the notebook image. Also enable ingress so we can connect to the application from our workstation.
     ```
     az containerapp create \
@@ -109,7 +116,9 @@ Create the application and deploy the notebook image. Also enable ingress so we 
       -n $music-jupyer | grep token
     ```
 
+
 5. Create the Backend and Frontend Applications
+
 Once we have the embeddings generated we can create the backend and frontend applications.
     ```
     # backend
@@ -137,7 +146,8 @@ Once we have the embeddings generated we can create the backend and frontend app
       --min-replicas 1 \
       --max-replicas 1 \
       --ingress external \
-      --target-port 8080 
+      --target-port 8080 \
+      --env-vars UI_BACKEND=http://music-backend:8000
     ```
 Given all applications were deployed successfully the application should now be accessible at the URL shown after the frontend command completes.
 

@@ -10,7 +10,7 @@ public class Utils {
             // Log an error message
             LOGGER.severe("Environment variable UI_BACKEND is not set. Using localhost as the default ui backend endpoint.");
             // return default server if UI_BACKEND is not set
-            backendServer = "localhost";
+            backendServer = "http://localhost";
         }
         return backendServer;
     }

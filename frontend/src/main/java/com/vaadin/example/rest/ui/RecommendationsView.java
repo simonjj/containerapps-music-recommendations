@@ -39,7 +39,7 @@ public class RecommendationsView extends Div {
             Label genreLabel = new Label(song.getGenre());
             Label scoreLabel = new Label(song.getScore());
             AudioPlayer audioPlayer = new AudioPlayer();
-            audioPlayer.setSource("https://" +Utils.getBackendServer()+ "/songs/play/" + song.getIds());
+            audioPlayer.setSource(Utils.getBackendServer()+ "/songs/play/" + song.getIds());
             songLayout.add(nameLabel, artistLabel, genreLabel, scoreLabel, audioPlayer);
             layout.add(songLayout);
         }

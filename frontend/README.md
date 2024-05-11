@@ -3,7 +3,7 @@
 ![UI screenshot](./misc/screenshot.png)
 
 ## Overview
-This frontend is part of a larger application, please see [Music Recommendation Service](../README.md) for full details. The frontend was built using Java and [Vaadin](https://vaadin.com/), it provides a basic GUI for the music recommendation service. The frontend is based on the [`vaadin/vaadin-rest-example`](https://github.com/vaadin/vaadin-rest-example). The frontend depends on the [backend](../backend/README.md), the backend endpoint is provided via the `UI_BACKEND` environment variable and takes the form of `servername` or `servername:port`. All backend access will occur through HTTPS.
+This frontend is part of a larger application, please see [Music Recommendation Service](../README.md) for full details. The frontend was built using Java and [Vaadin](https://vaadin.com/), it provides a basic GUI for the music recommendation service. The frontend is based on the [`vaadin/vaadin-rest-example`](https://github.com/vaadin/vaadin-rest-example). The frontend depends on the [backend](../backend/README.md), the backend endpoint is provided via the `UI_BACKEND` environment variable and takes the form of `scheme://servername:port` (for example (`http://music-backend:8000`)).
 
 ## Build and Run
 To run and build the application locally please ensure you have Java version 17+ along with Maven installed then follow these steps:

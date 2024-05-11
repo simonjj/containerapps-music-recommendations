@@ -52,7 +52,7 @@ public class SongRestService implements Serializable {
 
 		// Fetch from 3rd party API; configure fetch
 		final RequestHeadersSpec<?> spec = WebClient.create().get()
-				.uri("https://" +Utils.getBackendServer()+ "/songs");
+				.uri(Utils.getBackendServer()+ "/songs");
 
 		// do fetch and map result
 		final List<Song> songs = spec.retrieve().toEntityList(Song.class).block().getBody();
@@ -67,7 +67,7 @@ public class SongRestService implements Serializable {
 
         // Fetch from 3rd party API; configure fetch
         final RequestHeadersSpec<?> spec = WebClient.create().get()
-                .uri("https://" +Utils.getBackendServer()+ "/songs/recommend/" + id);
+                .uri(Utils.getBackendServer()+ "/songs/recommend/" + id);
 
         // do fetch and map result
         final List<Song> songs = spec.retrieve().toEntityList(Song.class).block().getBody();

@@ -63,7 +63,7 @@ public class SongDetailView extends VerticalLayout {
         artistLabel.setText("Artist: " + song.getArtist());
         genreLabel.setText("Genre: " + song.getGenre());
         scoreLabel.setText("Score: " + song.getScore());
-        audioPlayer.setSource("https://" +Utils.getBackendServer()+ "/songs/play/" + song.getIds());
+        audioPlayer.setSource(Utils.getBackendServer()+ "/songs/play/" + song.getIds());
 
         recommendButton.addClickListener(clickEvent -> {
             //splitLayout.setSplitterPosition(25);
