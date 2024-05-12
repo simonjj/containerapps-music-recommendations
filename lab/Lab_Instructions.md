@@ -5,7 +5,7 @@
 
 This is a Windows desktop environment. **Access your personalized credentials** by switching from the **Instructions** tab to the **Resources** tab (see screenshot).
 
-!IMAGE[skillable_start_highlight.png](instructions262805/skillable_start_highlight.png)
+![Skillable Start](https://github.com/simonjj/containerapps-music-recommendations/blob/main/lab/instructions262805/skillable_start_highlight.png?raw=true)
 
 Use **your personalized** credentials in the **Resources** tab to:
 
@@ -235,11 +235,11 @@ az containerapp create \
 
 Since we are interacting with sound **we will need to hear the music** playing. Open the browser on your physical hardware in front of you access the URL by copy and pasting it from the remote lab system. 
 
-!IMAGE[portal_running_status.png](./instructions262805/portal_running_status.png)
+![portal_running_status.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/skillable_start_highlight.png)
 
 Meanwhile, go to the [Azure portal](https://portal.azure.com/#home) and locate your resource group `music-rec-service`. Look for the `music-jupyter` app and verify its running status in the **Revisions and replicas panel** (Application sub-group). Once your notebook application is active and serving traffic, click on the **Application Url** in the top right corner of the **Overview panel**.
 
-!IMAGE[portal_appurl.png](instructions262805/portal_appurl.png)
+!IMAGE[portal_appurl.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/portal_appurl.png)
 
 
 
@@ -249,7 +249,9 @@ Meanwhile, go to the [Azure portal](https://portal.azure.com/#home) and locate y
 
 # Collect access credentials and login
 
-!IMAGE[jupyter_token.png](instructions262805/jupyter_token.png)
+!IMAGE[jupyter_token.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_token.png)
+
+                          https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/portal_running_status.png
 
 ```powershell
 az containerapp logs show `
@@ -269,7 +271,7 @@ The command above will display a token which represents **your login password.**
 
 Paste your login token into the field to login.
 
-!IMAGE[jupyter_login.png](instructions262805/jupyter_login.png)
+!IMAGE[jupyter_login.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_login.png)
 
 ===
 
@@ -281,11 +283,11 @@ Now that we have our vector database and Jupyter let's use them. Jupyter Lab/Not
 
 > [!TIP] Some notebook cells will produce red output and will download sizeable models. Collapse them by clicking the blow bar on the left hand side.
 
-!IMAGE[jupyter_start_2.png](instructions262805/jupyter_start_2.png)
+!IMAGE[jupyter_start_2.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_start_2.png)
 
 Once we've run a few of the code cell we will see the system starting to generate our embeddings. Notice the rate of generation when using CPU.
 
-!IMAGE[jupyter_embeddings.png](instructions262805/jupyter_embeddings.png)
+!IMAGE[jupyter_embeddings.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_embeddings.png)
 
 > [!NOTE] Creating embeddings is a heavily compute intensive process. For lab it is too time consuming as it takes several hours even on GPU. During this step we will simply explore and learn about the process and what they look like.
 
@@ -298,7 +300,7 @@ Once we've run a few of the code cell we will see the system starting to generat
 
 The model we've used to generate our audio embeddings is very compute intensive. It would take hours of compute time on a GPU to generate embeddings for all of our 11,000 songs. That's why we will import a pre-computed set of embeddings into our vector database next. To do so double-click the **`import.ipynb`** and run the one cell therein by clicking the play button (see below).
 
-!IMAGE[jupyter_import.png](instructions262805/jupyter_import.png)
+!IMAGE[jupyter_import.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_import.png)
 
 
 ===
@@ -344,7 +346,7 @@ az containerapp create \
 
 Keep track of the Running status of the API via **Revisions and replicas** as it will take several minutes to launch. After the application is running you should be able to access `http://<YOUR_ACA_ASSIGNED_DOMAIN>/songs`. If you get a JSON list of songs your backend is working as expected. **Copy this URL (without /songs) as you will need it for the next step.**
 
-!IMAGE[backend_songs.png](instructions262805/backend_songs.png)
+!IMAGE[backend_songs.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/backend_songs.png)
 
 
 ===
@@ -398,4 +400,4 @@ After the application is created and running **access the app from your physical
 
 Recommendations can be exercised in many ways. The ACA vector db Add-on can also be directly accessed from Jupyter via the **`recommend.ipynb`** notebook. Here you can exercise the embeddings without the need to stand up the other application components. **Using recommendations requires you to import embeddings prior via the `import.ipynb` notebook.**
 
-!IMAGE[jupyter_recommendations.png](instructions262805/jupyter_recommendations.png)
+!IMAGE[jupyter_recommendations.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_recommendations.png)
