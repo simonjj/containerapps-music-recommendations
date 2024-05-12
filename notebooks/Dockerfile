@@ -1,4 +1,7 @@
-FROM jupyter/tensorflow-notebook
+# ds_build_s
+#FROM quay.io/jupyter/base-notebook
+# ds_build_m
+FROM quay.io/jupyter/pytorch-notebook
 
 ENV TRANSFORMERS_CACHE=/tmp/.cache
 ENV TOKENIZERS_PARALLELISM=true
@@ -11,30 +14,22 @@ ENV TOKENIZERS_PARALLELISM=true
 # If you do switch to root, always be sure to add a "USER $NB_USER" command at the end of the
 # file to ensure the image runs as a unprivileged user by default.
 
-USER root
-
-RUN python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir \
-    qdrant-client \
-    datasets \
-    pandas \
-    numpy \
-    torch \
-    librosa \
-    tensorflow \
-    panns-inference \
-    pedalboard \
-    streamlit \
-    openl3
-
+#USER root
 USER ${NB_UID}
 
-COPY start.ipynb "${HOME}"
-COPY import.ipynb "${HOME}"
-COPY recommend.ipynb "${HOME}"
-COPY data_prep.ipynb "${HOME}/data/"
-COPY data/ "${HOME}/data/"
+COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/
+RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
+COPY --chown=${NB_UID}:${NB_GID} start.ipynb "${HOME}"
+COPY --chown=${NB_UID}:${NB_GID} import.ipynb "${HOME}"
+COPY --chown=${NB_UID}:${NB_GID} recommend.ipynb "${HOME}"
+COPY --chown=${NB_UID}:${NB_GID} data_prep.ipynb "${HOME}/data/"
+COPY --chown=${NB_UID}:${NB_GID} data/ "${HOME}/data/"
+
+#RUN fix-permissions "/home/${NB_USER}"
+
+#USER ${NB_UID}
 WORKDIR "${HOME}"
 ENTRYPOINT ["start-notebook.sh"]
-CMD ["--NotebookApp.default_url=/lab/tree/start.ipynb"]
