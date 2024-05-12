@@ -270,7 +270,7 @@ The command above will display a token which represents **your login password.**
 
 Paste your login token into the field to login.
 
-!IMAGE[jupyter_login.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_login.png)
+![jupyter_login.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_login.png)
 
 ===
 
