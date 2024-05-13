@@ -121,27 +121,16 @@ az group create \
 
 The recommendation service's "magic" largely relies on the Azure Container Apps vector database (Qdrant) Add-on, so the primary step is to set up this database. This vector database will be a crucial component of the recommendation service.
 
-## Create the container apps environment with a workload profile
+## Create the container apps environment
 
 ```powershell
-
 # create the environment first
+
 az containerapp env create `
   --name $env:ACA_ENV `
   --resource-group $env:RG `
   --location $env:LOCATION `
   --enable-workload-profiles
-
-
-# add a workload profile for the large Jupyter image
-
-az containerapp env workload-profile add `
-  --name $env:ACA_ENV `
-  --resource-group $env:RG `
-  --workload-profile-type D8 `
-  --workload-profile-name bigProfile `
-  --min-nodes 1 --max-nodes 1
-
 ```
 
 
@@ -153,16 +142,6 @@ az containerapp env create \
   --resource-group $RG \
   --location $LOCATION \
   --enable-workload-profiles
-
-
-# add a workload profile for the large Jupyter image
-
-az containerapp env workload-profile add \
-  --name $ACA_ENV \
-  --resource-group $RG \
-  --workload-profile-type D8 \
-  --workload-profile-name bigProfile \
-  --min-nodes 1 --max-nodes 1
 ```
 
 ## Launch Azure Container Apps Qdrant vector DB Add-on
@@ -189,6 +168,36 @@ az containerapp add-on qdrant create \
 ```
 
 
+
+## Add a dedicated workload profile to our environment for bigger and GPU workloads
+
+As part of this lab we will not use GPU. If we had GPU quota we would specify it here. We will be using the D8 profile.
+
+```powershell
+# add a workload profile for the large Jupyter image
+
+az containerapp env workload-profile add `
+  --name $env:ACA_ENV `
+  --resource-group $env:RG `
+  --workload-profile-type D8 `
+  --workload-profile-name bigProfile `
+  --min-nodes 1 --max-nodes 1
+
+```
+
+
+```bash
+# add a workload profile for the large Jupyter image
+
+az containerapp env workload-profile add \
+  --name $ACA_ENV \
+  --resource-group $RG \
+  --workload-profile-type D8 \
+  --workload-profile-name bigProfile \
+  --min-nodes 1 --max-nodes 1
+  ```
+
+
 ===
 
 
@@ -201,7 +210,6 @@ As an initial step, we're generating song embeddings. These embeddings will faci
 The notebook container is quite large (10GB). Creation of the application will hence take a few minutes to complete (~5 min).
 
 ```powershell
-
 az containerapp create `
   --name music-jupyter `
   --resource-group $env:RG `
