@@ -26,8 +26,8 @@ Before we dive into an overview and introduction of the application let's kick o
 ## Register our Azure subscription with the needed providers
 
 ``` powershell
-az provider register -n Microsoft.OperationalInsights --wait ; \
-az provider register -n Microsoft.ServiceLinker --wait ; \
+az provider register -n Microsoft.OperationalInsights --wait ; `
+az provider register -n Microsoft.ServiceLinker --wait ; `
 az provider register -n Microsoft.App --wait
 ```
 
