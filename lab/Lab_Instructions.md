@@ -146,7 +146,6 @@ az containerapp env create \
 
 ## Launch Azure Container Apps Qdrant vector DB Add-on
 
-
 ```powershell
 # Create the vector db add-on
 
@@ -155,7 +154,6 @@ az containerapp add-on qdrant create `
   --resource-group $env:RG `
   --name qdrant
 ```
-
 
 
 ```bash
@@ -182,7 +180,6 @@ az containerapp env workload-profile add `
   --workload-profile-type D8 `
   --workload-profile-name bigProfile `
   --min-nodes 1 --max-nodes 1
-
 ```
 
 
@@ -205,7 +202,7 @@ az containerapp env workload-profile add \
 
 As an initial step, we're generating song embeddings. These embeddings will facilitate song comparison for the part 2 service based on similarity. Being a Data Science/Machine Learning task, we'll employ Jupyter notebooks, which offer interactive execution environments for more direct interaction with data and embeddings.
 
-## Create the Jupyter contaner app and login
+## Create the Jupyter container app and login
 
 The notebook container is quite large (10GB). Creation of the application will hence take a few minutes to complete (~5 min).
 
@@ -226,7 +223,6 @@ az containerapp create `
 
 
 ```bash
-
 az containerapp create \
   --name music-jupyter \
   --resource-group $RG \
@@ -408,3 +404,78 @@ After the application is created and running **access the app from your physical
 Recommendations can be exercised in many ways. The ACA vector db Add-on can also be directly accessed from Jupyter via the **`recommend.ipynb`** notebook. Here you can exercise the embeddings without the need to stand up the other application components. **Using recommendations requires you to import embeddings prior via the `import.ipynb` notebook.**
 
 ![jupyter_recommendations.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_recommendations.png)
+
+
+
+====
+
+
+
+# APPENDIX: Utilizing GPU
+
+In case you have access to GPU quota on ACA you'd like to use. This will be useful for our embedding generation. Which means we will have to deploy the Jupyter notebook to the GPU workload profile. To do so modify the above steps to do the following:
+
+## Create the ACA environment with GPU enabled
+
+```powershell
+# create the environment first
+
+az containerapp env create `
+  --name $env:ACA_ENV `
+  --resource-group $env:RG `
+  --location $env:LOCATION `
+  --enable-workload-profiles `
+  --enable-dedicated-gpu
+```
+
+
+```bash
+# create the environment first
+
+az containerapp env create \
+  --name $ACA_ENV \
+  --resource-group $RG \
+  --location $LOCATION \
+  --enable-workload-profiles \
+  --enable-dedicated-gpu
+```
+
+After this step return to the regular instructions to launch the D8 workload profile. Which we will use for the backend only. Return back to these instructions once we launch the Jupyter notebook.
+
+
+## Create the Jupyter container app
+
+The GPU image is 5GB larger in size (a total of ~15GB). This means it may take some extra time and you might find that the image times out during launch (keep an eye on **Revisions and replicas**). Should you experience this, I suggest you launch it again via a new revision by creating a dummy environment variable to restart the launch process.
+
+```powershell
+az containerapp create `
+  --name music-jupyter `
+  --resource-group $env:RG `
+  --environment $env:ACA_ENV `
+  --image simonj.azurecr.io/aca-music-recommendation-notebook:gpu `
+  --cpu 24 --memory 48.0Gi `
+  --workload-profile-name gpu `
+  --min-replicas 1 `
+  --max-replicas 1 `
+  --target-port 8888 `
+  --ingress external `
+  --bind qdrant
+```
+
+
+```bash
+az containerapp create \
+  --name music-jupyter \
+  --resource-group $RG \
+  --environment $ACA_ENV \
+  --image simonj.azurecr.io/aca-music-recommendation-notebook:gpu \
+  --cpu 24 --memory 48.0Gi \
+  --workload-profile-name gpu \
+  --min-replicas 1 \
+  --max-replicas 1 \
+  --target-port 8888 \
+  --ingress external \
+  --bind qdrant
+```
+
+Now return to the instructions on how to log into your notebook.
