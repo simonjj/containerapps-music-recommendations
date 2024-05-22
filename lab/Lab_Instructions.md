@@ -1,27 +1,26 @@
 
-# Logging in
-
+# Logging into Azure and your workstation
 
 
 This is a Windows desktop environment. **Access your personalized credentials** by switching from the **Instructions** tab to the **Resources** tab (see screenshot).
-
-![Skillable Start](https://github.com/simonjj/containerapps-music-recommendations/blob/main/lab/instructions262805/skillable_start_highlight.png?raw=true)
 
 Use **your personalized** credentials in the **Resources** tab to:
 
 - Log into the the Windows desktop system.
 - Choose between Windows PowerShell, Ubuntu Bash and Cloud Shell.
 - Log into Azure by using `az login` or following the instructions on the screen.
-- After loging into Azure return to the **Instructions** tab.
+- After logging into Azure return to the **Instructions** tab.
 
 > [!TIP]  Use the **[T]** icon to virtually type at the location of your cursor. This works everywhere except for Cloud Shell.
+
+![Skillable Start](https://github.com/simonjj/containerapps-music-recommendations/blob/main/lab/instructions262805/skillable_start_highlight.png?raw=true)
 
 ===
 
 
 # Register Azure resource providers
 
-Before we dive into an overview and introduction of the application let's kick off the Azure provider registration. 
+Before we dive into an overview and introduction of the application let's kick off the Azure provider registration. After we kicked off the steps and **while we wait, let's continue to the next steps** and read about the application we're building.
 
 ## Register our Azure subscription with the needed providers
 
@@ -36,8 +35,6 @@ az provider register -n Microsoft.OperationalInsights --wait && \
 az provider register -n Microsoft.ServiceLinker --wait && \
 az provider register -n Microsoft.App --wait
 ```
-
-After we kicked off the steps and **while we wait, let's continue to the next steps** and read about the application we're building.
 
 
 ===
@@ -99,18 +96,13 @@ export FRONTEND_IMAGE=simonj.azurecr.io/aca-music-recommendation-frontend
 
 
 ```powershell
-
 az group create -l $env:LOCATION --name $env:RG
 ```
 
 
 ```bash
-# create the resource group
-
-az group create \
-  -l $LOCATION --name $RG
+az group create -l $LOCATION --name $RG
 ```
-
 
 
 ===
@@ -288,7 +280,7 @@ Now that we have our vector database and Jupyter let's use them. Jupyter Lab/Not
 
 ![jupyter_start_2.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_start_2.png)
 
-Once we've run a few of the code cell we will see the system starting to generate our embeddings. Notice the rate of generation when using CPU.
+Once we've run a few of the code cell we will see the system starting to generate our embeddings. Notice the rate of generation when using CPU. **Stop here and move to the next step.**
 
 ![jupyter_embeddings.png](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/jupyter_embeddings.png)
 
@@ -394,6 +386,16 @@ az containerapp create \
 ```
 
 After the application is created and running **access the app from your physical hardware again to ensure you hear sound**. Retrieve the **Application Url** (top right) on the **Overview page** for the `music-frontend`.
+
+
+===
+
+# APPENDIX: Take home instructions
+
+This project and instructions are also available online at [https://aka.ms/aca/music-recommendation-service](https://aka.ms/aca/music-recommendation-service). 
+
+![QR Code](https://raw.githubusercontent.com/simonjj/containerapps-music-recommendations/main/lab/instructions262805/qr_code.png)
+
 
 
 ===
